@@ -144,11 +144,10 @@ counts_1 <- reduce(c1_tokens, V=V); S1 <- length(c1_tokens)
 condprob[,1] <- (as.numeric(counts_0[,2]) + 1)/(S0 + length(V))
 condprob[,2] <- (as.numeric(counts_1[,2]) + 1)/(S1 + length(V))
 
-
+#get class priors
 p1 <- sum(as.numeric(name_class_stor[,2]))/nrow(name_class_stor)
 p0 <- sum(as.numeric(name_class_stor[,2]==0))/nrow(name_class_stor)
 priors <- c(p0,p1)
-
 
 test_doc_classify <- function(file, V_vec=V, cp = condprob, p = priors){
   '
@@ -182,9 +181,9 @@ test_doc_classify <- function(file, V_vec=V, cp = condprob, p = priors){
     }
     scores <- as.data.frame(t(scores))
     colnames(scores) <- c('0', '1')
-    cl <- test_doc_classify(newfile)
-    cat("Most likely class of new file: ", cl)
-    return(as.numeric(names(which.max(scores))))
+    cl <- as.numeric(names(which.max(scores)))
+    cat("Most likely class of new file: ", cl, '\n')
+    return(cl)
   }
   else{
     print('Something went wrong while reading this file!\n')
@@ -192,7 +191,34 @@ test_doc_classify <- function(file, V_vec=V, cp = condprob, p = priors){
   }
 }
 
+#Obtain overall success/misclassification rate:
+success_vec <- matrix(0, nrow = nrow(name_class_stor), ncol = 1)
+for (i in 1:nrow(name_class_stor)){
+  ncs_temp <- name_class_stor[which(name_class_stor[,1]!=name_class_stor[i,1]),]
+  c0 <- text_for_class(class = 0, ncs_temp)
+  c0_tokens <- c0$text
+  c1 <- text_for_class(class = 1, ncs_temp)
+  c1_tokens <- c1$text
+  ncs_temp <- rbind(c0$name_class_stor, c1$name_class_stor)
+  V <- unique(c(c0_tokens, c1_tokens))
+  p1 <- sum(as.numeric(ncs_temp[,2]))/nrow(ncs_temp)
+  p0 <- sum(as.numeric(ncs_temp[,2]==0))/nrow(ncs_temp)
+  priors <- c(p0,p1)
+  condprob = as.data.frame(matrix(nrow = length(V), ncol = 2))
+  colnames(condprob) <- c('Class0', 'Class1')
+  rownames(condprob) <- V
+  counts_0 <- reduce(c0_tokens, V_vec=V); S0 <- length(c0_tokens)
+  counts_1 <- reduce(c1_tokens, V_vec=V); S1 <- length(c1_tokens)
+  condprob[,1] <- (as.numeric(counts_0[,2]) + 1)/(S0 + length(V))
+  condprob[,2] <- (as.numeric(counts_1[,2]) + 1)/(S1 + length(V))
+  pred <- test_doc_classify(file = name_class_stor[i,1])
+  if (pred == name_class_stor[i,2]){
+    success_vec[i] <- 1
+  }
+}
 
+error_rate <- sum(success_vec==0)/nrow(name_class_stor)
+cat('Overall misclassification rate: ', error_rate, '\n')
 
 
 
