@@ -10,6 +10,7 @@ Successfully classify a cover letter as successful (hear back from a company) or
 
 ###How to use:
 1. Make a directory containing all of your cover letters. These must be **.docx** files.
-2. Append a 0 or a 1 to the filename, preceding the **.docx** part. This will indicate the success of the cover letter. For example, **Operations_Analytics_Analyst_1.docx**
-3. Run **cover_letter_classification.R**. Input the path to the directory that you made in Step 1.
-4. If you're curious about the likely efficacy of a certain cover letter, try using the **test_doc_classify** function on a specific document. Otherwise, if you're curious about the leave-one-out predictions using the cover letters in your directory, these are saved in an R data.frame called *predictions*.
+2. Un-comment lines 3-9 in cover_letter_classification.R, and comment line 10.
+3. Append a 0 or a 1 to the filename, preceding the **.docx** part. This will indicate the success of the cover letter. For example, **Operations_Analytics_Analyst_1.docx**
+4. Run **cover_letter_classification.R**. Input the path to the directory that you made in Step 1.
+5. If you're curious about the likely efficacy of a certain cover letter, try using the **test_doc_classify** function on a specific document. Otherwise, if you're curious about the leave-one-out predictions using the cover letters in your directory, these are saved in an R data.frame called *predictions*.

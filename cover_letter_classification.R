@@ -4,7 +4,7 @@
 # wd <- readline(prompt="Please enter the path to the directory containing cover letters: ")
 # temp <- try(setwd(wd), silent = T)
 # while(class(temp)=='try-error'){
-#   wd <- readline(prompt="Please enter directory containing cover letters: ")
+#   wd <- readline(prompt="This path does not exist. Please enter directory containing cover letters: ")
 #   temp <- try(setwd(wd), silent = T)
 # }
 setwd('/Users/fineiskid/Desktop/Internships:Jobs/All_cover_letters/')
