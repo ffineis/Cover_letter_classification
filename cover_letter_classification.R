@@ -218,6 +218,8 @@ for (i in 1:nrow(name_class_stor)){
 }
 
 error_rate <- sum(success_vec==0)/nrow(name_class_stor)
+predictions <- as.data.frame(cbind(name_class_stor[,1], success_vec))
+colnames(predictions) <- c('File name', 'Predicted Class')
 cat('Overall misclassification rate: ', error_rate, '\n')
 
 
